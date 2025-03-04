@@ -1,49 +1,79 @@
-import { Brain, Cloud, Shield, Zap } from "lucide-react"
+"use client";
+
+import { motion } from 'framer-motion';
+import { MessageSquare, Brain, RefreshCw, LineChart } from 'lucide-react';
 
 const features = [
   {
-    name: "AI-Powered Analytics",
-    description: "Harness the power of machine learning to derive actionable insights from your data.",
-    icon: Brain,
+    icon: <MessageSquare className="w-8 h-8 text-blue-400" />,
+    title: "Real-time Language Translation",
+    description: "Break language barriers with instant, accurate translations across Indian languages."
   },
   {
-    name: "Cloud-Native Architecture",
-    description: "Scalable, resilient, and efficient solutions built for the modern cloud ecosystem.",
-    icon: Cloud,
+    icon: <Brain className="w-8 h-8 text-purple-400" />,
+    title: "AI-Powered Conversation Summaries",
+    description: "Get smart summaries of client interactions in your preferred language."
   },
   {
-    name: "Enterprise-Grade Security",
-    description: "State-of-the-art security measures to protect your most valuable assets.",
-    icon: Shield,
+    icon: <RefreshCw className="w-8 h-8 text-blue-400" />,
+    title: "Automated Follow-ups",
+    description: "Never miss a lead with smart, multilingual follow-up automation."
   },
   {
-    name: "High-Performance Systems",
-    description: "Optimized for speed and efficiency, our solutions deliver unparalleled performance.",
-    icon: Zap,
-  },
-]
+    icon: <LineChart className="w-8 h-8 text-purple-400" />,
+    title: "Actionable Insights",
+    description: "Make data-driven decisions with AI-powered communication analytics."
+  }
+];
 
-export default function Features() {
+export function Features() {
   return (
-    <section className="container space-y-16 py-24 md:py-32">
-      <div className="mx-auto max-w-[58rem] text-center">
-        <h2 className="font-bold text-3xl leading-[1.1] sm:text-3xl md:text-5xl">Cutting-Edge Solutions</h2>
-        <p className="mt-4 text-muted-foreground sm:text-lg">
-          Discover how Amane Soft can transform your business with our innovative technologies.
-        </p>
-      </div>
-      <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-2">
-        {features.map((feature) => (
-          <div key={feature.name} className="relative overflow-hidden rounded-lg border bg-background p-8">
-            <div className="flex items-center gap-4">
-              <feature.icon className="h-8 w-8" />
-              <h3 className="font-bold">{feature.name}</h3>
-            </div>
-            <p className="mt-2 text-muted-foreground">{feature.description}</p>
-          </div>
-        ))}
+    <section id="features" className="py-20 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-blue-900/20" />
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            Powerful Features for Modern Real Estate
+          </h2>
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            Transform your communication with cutting-edge AI technology
+          </p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {features.map((feature, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="feature-card group"
+            >
+              <div className="mb-6 transform group-hover:scale-110 transition-transform duration-300">
+                {feature.icon}
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-4">{feature.title}</h3>
+              <p className="text-gray-300 mb-6">{feature.description}</p>
+              <div className="absolute bottom-6 left-6 right-6">
+                <button className="text-blue-400 hover:text-blue-300 transition-colors flex items-center">
+                  Learn more
+                  <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
-  )
+  );
 }
-
