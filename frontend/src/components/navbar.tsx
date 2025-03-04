@@ -37,28 +37,24 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="text-3xl font-bold bg-gradient-to-r from-blue-500 to-purple-400 bg-clip-text text-transparent hover:opacity-80 transition-opacity">
+          <Link
+            href="/"
+            className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-500 to-purple-400 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+          >
             CommunicatorAI
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="#features" className="text-white hover:text-blue-200 transition-colors">
-              Features
-            </Link>
-            <Link href="#demo" className="text-white hover:text-blue-200 transition-colors">
-              Demo
-            </Link>
-            <Link href="#contact" className="text-white hover:text-blue-200 transition-colors">
-              Contact
-            </Link>
-            <Link href="#features" className="primary-button">
-              Get Early Access
-            </Link>
-          </div>
-
-          {/* Authentication & Mobile Menu Button */}
-          <div className="flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
+            {["Features", "Demo", "Contact"].map((item) => (
+              <Link
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                className="text-white hover:text-blue-200 transition-colors"
+              >
+                {item}
+              </Link>
+            ))}
             <SignedOut>
               {pathname === "/" && (
                 <>
@@ -78,37 +74,54 @@ export function Navbar() {
             <SignedIn>
               <UserButton />
             </SignedIn>
-
-            {/* Mobile Menu Button */}
-            <button className="md:hidden text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
           </div>
+
+          {/* Mobile Menu Button */}
+          <button className="md:hidden text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Navigation (Includes Sign In & Sign Up) */}
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden mt-2"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="md:hidden mt-2 bg-white/10 rounded-lg p-6 space-y-6 flex flex-col items-center"
             >
-              <div className="flex flex-col space-y-4 py-4">
-                <Link href="#features" className="text-white hover:text-blue-200 transition-colors" onClick={() => setIsMenuOpen(false)}>
-                  Features
+              {["Features", "Demo", "Contact"].map((item) => (
+                <Link
+                  key={item}
+                  href={`#${item.toLowerCase()}`}
+                  className="text-white hover:text-blue-200 transition-colors text-lg"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item}
                 </Link>
-                <Link href="#demo" className="text-white hover:text-blue-200 transition-colors" onClick={() => setIsMenuOpen(false)}>
-                  Demo
-                </Link>
-                <Link href="#contact" className="text-white hover:text-blue-200 transition-colors" onClick={() => setIsMenuOpen(false)}>
-                  Contact
-                </Link>
-                <Link href="#features" className="primary-button inline-block text-center" onClick={() => setIsMenuOpen(false)}>
-                  Get Early Access
-                </Link>
-              </div>
+              ))}
+
+              <SignedOut>
+                {pathname === "/" && (
+                  <div className="flex flex-col space-y-4 w-full">
+                    <SignInButton>
+                      <Button variant="ghost" className="w-full text-lg text-gray-300 hover:text-white transition-all">
+                        Sign In
+                      </Button>
+                    </SignInButton>
+                    <SignUpButton>
+                      <Button className="w-full text-lg px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-md hover:opacity-90 transition-all">
+                        Get Started
+                      </Button>
+                    </SignUpButton>
+                  </div>
+                )}
+              </SignedOut>
+
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
             </motion.div>
           )}
         </AnimatePresence>

@@ -44,11 +44,11 @@ export function Hero() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative"
+            className="relative w-full max-w-lg mx-auto"
           >
-            <div className="aspect-square rounded-2xl glass-effect p-8 relative overflow-hidden">
+            <div className="w-full rounded-2xl glass-effect p-4 sm:p-6 md:p-8 relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10" />
-              <div className="relative z-10">
+              <div className="relative z-10 space-y-4">
                 {/* Mock Chat Interface */}
 
                 {/* Agent Message */}
@@ -56,10 +56,10 @@ export function Hero() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 0.5 }}
-                  className="bg-white/10 rounded-lg p-4 mb-4"
+                  className="bg-white/10 rounded-lg p-3 sm:p-4"
                 >
-                  <p className="text-blue-200">Agent</p>
-                  <p className="text-white">Hello! How can I help you today?</p>
+                  <p className="text-blue-200 text-sm sm:text-base">Agent</p>
+                  <p className="text-white text-sm sm:text-base">Hello! How can I help you today?</p>
                 </motion.div>
 
                 {/* Client Message */}
@@ -67,10 +67,10 @@ export function Hero() {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 1 }}
-                  className="bg-white/10 rounded-lg p-4 mb-4 ml-8"
+                  className="bg-white/10 rounded-lg p-3 sm:p-4 ml-4 sm:ml-8"
                 >
-                  <p className="text-purple-200">Client</p>
-                  <p className="text-white">नमस्ते! मैं 3BHK फ्लैट खोज रहा हूं</p>
+                  <p className="text-purple-200 text-sm sm:text-base">Client</p>
+                  <p className="text-white text-sm sm:text-base">नमस्ते! मैं 3BHK फ्लैट खोज रहा हूं</p>
                 </motion.div>
 
                 {/* AI Translation */}
@@ -78,10 +78,10 @@ export function Hero() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 1.5 }}
-                  className="bg-white/10 rounded-lg p-4 mb-4"
+                  className="bg-white/10 rounded-lg p-3 sm:p-4"
                 >
-                  <p className="text-blue-200">AI Translation</p>
-                  <p className="text-white">Hello! I am looking for a 3BHK flat</p>
+                  <p className="text-blue-200 text-sm sm:text-base">AI Translation</p>
+                  <p className="text-white text-sm sm:text-base">Hello! I am looking for a 3BHK flat</p>
                 </motion.div>
 
                 {/* Agent Message 2 */}
@@ -89,10 +89,10 @@ export function Hero() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 2 }}
-                  className="bg-white/10 rounded-lg p-4 mb-4"
+                  className="bg-white/10 rounded-lg p-3 sm:p-4"
                 >
-                  <p className="text-blue-200">Agent</p>
-                  <p className="text-white">Sure! Which location are you looking for?</p>
+                  <p className="text-blue-200 text-sm sm:text-base">Agent</p>
+                  <p className="text-white text-sm sm:text-base">Sure! Which location are you looking for?</p>
                 </motion.div>
 
                 {/* Client Message 2 */}
@@ -100,10 +100,10 @@ export function Hero() {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 2.5 }}
-                  className="bg-white/10 rounded-lg p-4 mb-4 ml-8"
+                  className="bg-white/10 rounded-lg p-3 sm:p-4 ml-4 sm:ml-8"
                 >
-                  <p className="text-purple-200">Client</p>
-                  <p className="text-white">Andheri या Bandra में कुछ अच्छा हो तो बताइए।</p>
+                  <p className="text-purple-200 text-sm sm:text-base">Client</p>
+                  <p className="text-white text-sm sm:text-base">Andheri या Bandra में कुछ अच्छा हो तो बताइए।</p>
                 </motion.div>
               </div>
             </div>

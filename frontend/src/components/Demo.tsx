@@ -58,42 +58,42 @@ export function Demo() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="relative"
-          >
-            <div className="aspect-[4/3] rounded-2xl glass-effect p-6 relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10" />
-              <div className="relative z-10 h-full flex flex-col">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-red-400" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-400" />
-                    <div className="w-3 h-3 rounded-full bg-green-400" />
-                  </div>
-                </div>
-                <div className="flex-1 overflow-hidden">
-                  {/* Interactive Demo Content */}
-                  <div className="space-y-4">
-                    <div className="bg-white/10 rounded-lg p-4">
-                      <p className="text-sm text-blue-200 mb-1">Agent (English)</p>
-                      <p className="text-white">What type of property are you looking for?</p>
-                    </div>
-                    <div className="bg-white/10 rounded-lg p-4 ml-8">
-                      <p className="text-sm text-purple-200 mb-1">Client (Hindi)</p>
-                      <p className="text-white">मैं एक 3 बेडरूम अपार्टमेंट ढूंढ रहा हूं</p>
-                    </div>
-                    <div className="bg-white/10 rounded-lg p-4">
-                      <p className="text-sm text-green-200 mb-1">AI Translation</p>
-                      <p className="text-white">I am looking for a 3 bedroom apartment</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+  initial={{ opacity: 0, x: 20 }}
+  whileInView={{ opacity: 1, x: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.6 }}
+  className="relative w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"
+>
+  <div className="w-full rounded-2xl glass-effect p-4 sm:p-6 relative overflow-hidden">
+    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10" />
+    <div className="relative z-10 h-full flex flex-col">
+      {/* Top Bar with Dots */}
+      <div className="flex items-center space-x-2 mb-3 sm:mb-4">
+        <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-400" />
+        <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-400" />
+        <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-green-400" />
+      </div>
+
+      {/* Interactive Demo Content */}
+      <div className="flex-1 overflow-hidden space-y-3 sm:space-y-4">
+        <div className="bg-white/10 rounded-lg p-3 sm:p-4">
+          <p className="text-xs sm:text-sm text-blue-200 mb-1">Agent (English)</p>
+          <p className="text-white text-sm sm:text-base">What type of property are you looking for?</p>
+        </div>
+
+        <div className="bg-white/10 rounded-lg p-3 sm:p-4 ml-2 sm:ml-8">
+          <p className="text-xs sm:text-sm text-purple-200 mb-1">Client (Hindi)</p>
+          <p className="text-white text-sm sm:text-base">मैं एक 3 बेडरूम अपार्टमेंट ढूंढ रहा हूं</p>
+        </div>
+
+        <div className="bg-white/10 rounded-lg p-3 sm:p-4">
+          <p className="text-xs sm:text-sm text-green-200 mb-1">AI Translation</p>
+          <p className="text-white text-sm sm:text-base">I am looking for a 3 bedroom apartment</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</motion.div>
         </div>
       </div>
     </section>
