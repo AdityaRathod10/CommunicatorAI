@@ -25,7 +25,8 @@ export function CTA() {
           </p>
           <Link
             href="#features"
-            className="primary-button inline-flex items-center text-lg"
+            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 px-6 rounded-lg 
+         hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-lg inline-flex items-center text-lg"
           >
             Get Started
             <ArrowRight className="ml-2 w-5 h-5" />

@@ -51,7 +51,8 @@ export function Demo() {
                 </div>
               </div>
             </div>
-            <button className="primary-button mt-8">
+            <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 px-6 rounded-lg 
+         hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-lg mt-8">
               Try Demo
             </button>
           </motion.div>

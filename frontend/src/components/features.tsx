@@ -55,7 +55,7 @@ export function Features() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="feature-card group"
+              className="bg-white/10 backdrop-blur-lg p-6 rounded-xl transition-transform duration-300 hover:-translate-y-2 group"
             >
               <div className="mb-6 transform group-hover:scale-110 transition-transform duration-300">
                 {feature.icon}
