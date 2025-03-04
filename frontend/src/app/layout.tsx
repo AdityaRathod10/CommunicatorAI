@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Amane Soft - Cutting-Edge Software Solutions",
+  title: "CommunicatorAI - Cutting-Edge Software Solutions",
   description: "Amane Soft delivers innovative, high-performance software solutions for businesses of the future.",
 }
 

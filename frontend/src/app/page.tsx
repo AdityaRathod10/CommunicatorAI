@@ -3,6 +3,7 @@ import { Features } from "@/components/Features"
 import { Demo } from '@/components/Demo';
 import { CTA } from "@/components/CTA"
 import { Footer } from "@/components/Footer"
+import ElevenLabsAgent from "@/components/ElevenLabsAgent.tsx";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <Demo />
       <CTA />
       <Footer />
+      <ElevenLabsAgent/>
     </main>
   );
 }
