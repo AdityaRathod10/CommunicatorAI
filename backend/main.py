@@ -1,7 +1,8 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware  # Import CORS middleware
 from pydantic import BaseModel
-from linkedin_api import Linkedin    # Installed as linkedin-api
-import google.generativeai as genai  # Correct import for Gemini AI
+from linkedin_api import Linkedin
+import google.generativeai as genai
 from dotenv import load_dotenv
 import os
 
@@ -20,6 +21,15 @@ linkedin = Linkedin(LINKEDIN_EMAIL, LINKEDIN_PASSWORD)
 
 # Initialize FastAPI
 app = FastAPI()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Allow requests from this origin
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allow all headers
+)
 
 # Define request model
 class CustomerAnalysisRequest(BaseModel):

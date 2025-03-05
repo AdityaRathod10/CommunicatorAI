@@ -43,6 +43,52 @@ export async function registerUser(
   })
 }
 
+// Get all users
+export async function getAllUsers() {
+  try {
+    const users = await prisma.Users.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true
+      },
+      orderBy: {
+        createdAt: 'desc' // Optional: order by most recent first
+      }
+    })
+
+    return users
+  } catch (error) {
+    console.error('Error fetching users:', error)
+    throw new Error('Unable to retrieve users')
+  }
+}
+
+// Optional: Get user by ID
+export async function getUserById(userId: string) {
+  try {
+    const user = await prisma.Users.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true
+      }
+    })
+
+    if (!user) {
+      throw new Error('User not found')
+    }
+
+    return user
+  } catch (error) {
+    console.error('Error fetching user:', error)
+    throw new Error('Unable to retrieve user')
+  }
+}
+
 // User login
 export async function loginUser(email: string, password: string) {
   // Find user by email (corrected model name to users)

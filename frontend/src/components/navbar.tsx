@@ -111,7 +111,7 @@ export default function Navbar() {
               href="/"
               className="text-3xl font-bold bg-gradient-to-r from-blue-500 to-purple-400 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
             >
-              huly
+              CommunicatorAI
             </Link>
             {/* Navigation Links */}
             <div className="hidden md:block ml-10">

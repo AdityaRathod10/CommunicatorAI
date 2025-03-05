@@ -45,6 +45,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import ClientsSection from "./ClientsSection"
 
 export default function Dashboard() {
   const [theme, setTheme] = useState<"dark" | "light">("dark")
@@ -54,6 +55,7 @@ export default function Dashboard() {
   const [conversionRate, setConversionRate] = useState(62)
   const [currentTime, setCurrentTime] = useState(new Date())
   const [isLoading, setIsLoading] = useState(true)
+  const [isClientsModalOpen, setIsClientsModalOpen] = useState(false)
   const [activeLanguage, setActiveLanguage] = useState("all")
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -123,7 +125,7 @@ export default function Dashboard() {
         this.x += this.speedX
         this.y += this.speedY
 
-        if (!canvas) return;
+        if (!canvas) return
         if (this.x > canvas.width) this.x = 0
         if (this.x < 0) this.x = canvas.width
         if (this.y > canvas.height) this.y = 0
@@ -192,6 +194,11 @@ export default function Dashboard() {
       month: "short",
       day: "numeric",
     })
+  }
+
+  // Handle clients click
+  const handleClientsClick = () => {
+    setIsClientsModalOpen(true)
   }
 
   return (
@@ -287,7 +294,7 @@ export default function Dashboard() {
                 <nav className="space-y-2">
                   <NavItem icon={Command} label="Dashboard" active />
                   <NavItem icon={MessageCircle} label="Conversations" />
-                  <NavItem icon={Users} label="Clients" />
+                  <NavItem icon={Users} label="Clients" onClick={handleClientsClick} />
                   <NavItem icon={Building} label="Properties" />
                   <NavItem icon={Calendar} label="Appointments" />
                   <NavItem icon={ListTodo} label="Follow-ups" />
@@ -305,6 +312,7 @@ export default function Dashboard() {
                 </div>
               </CardContent>
             </Card>
+            <ClientsSection isOpen={isClientsModalOpen} onClose={() => setIsClientsModalOpen(false)} />
           </div>
 
           {/* Main dashboard */}
@@ -958,10 +966,11 @@ export default function Dashboard() {
 }
 
 // Component for nav items
-function NavItem({ icon: Icon, label, active }: { icon: LucideIcon; label: string; active?: boolean }) {
+function NavItem({ icon: Icon, label, active, onClick }: { icon: LucideIcon; label: string; active?: boolean; onClick?: () => void }) {
   return (
     <Button
       variant="ghost"
+      onClick={onClick}
       className={`w-full justify-start ${active ? "bg-slate-800/70 text-teal-400" : "text-slate-400 hover:text-slate-100"}`}
     >
       <Icon className="mr-2 h-4 w-4" />
@@ -1342,4 +1351,3 @@ function ActionButton({ icon: Icon, label }: { icon: LucideIcon; label: string }
     </Button>
   )
 }
-
