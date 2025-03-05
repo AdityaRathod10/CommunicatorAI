@@ -47,6 +47,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import ClientsSection from "./ClientsSection"
 import axios from "axios"
+import ElevenLabsAgent from "./ElevenLabsAgent.tsx"
 
 interface Client {
   id: string;
@@ -1022,6 +1023,8 @@ export default function Dashboard() {
                   </div>
                 </CardContent>
               </Card>
+
+             
             </div>
           </div>
         </div>

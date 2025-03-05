@@ -19,7 +19,7 @@ export default function Home() {
           <Hero />
           <Features />
           <CTA />
-          <ElevenLabsAgent/>
+          <ElevenLabsAgent />
         </div>
         <Footer />
       </div>

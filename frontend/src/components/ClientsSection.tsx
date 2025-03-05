@@ -1,178 +1,222 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { 
+  GraduationCap, 
+  DollarSign, 
+  Target, 
+  Briefcase, 
+  AlignLeft, 
+  BookOpen 
+} from 'lucide-react';
 import axios from 'axios';
 
-// Types for our data
-interface Client{
-  id: string;  // Changed from number to string to match UUID
+interface Client {
+  id: string;
   name?: string;
-  userId?: string;
-  user?: {
-    name?: string;
-  };
 }
+
 interface LinkedinAnalysis {
   description: string;
   real_estate_assessment: string;
+  skills: string[];
+  education: string[];
+  investment_potential: number;
+  experience_years: number;
 }
 
-interface ClientsSectionProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export const ClientsSection: React.FC<ClientsSectionProps> = ({ isOpen, onClose }) => {
+export const ClientsSection: React.FC<{ 
+  isOpen: boolean; 
+  onClose: () => void 
+}> = ({ isOpen, onClose }) => {
   const [clients, setClients] = useState<Client[]>([]);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const [linkedinAnalysis, setLinkedinAnalysis] = useState<LinkedinAnalysis | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  // Fetch users when modal opens
+  // Fetch clients
   useEffect(() => {
     if (isOpen) {
-      const fetchUsers = async () => {
+      const fetchClients = async () => {
         try {
-          // Fetch users from the new API route
           const response = await axios.get('/api/get-clients');
           setClients(response.data);
         } catch (err) {
           console.error('Error fetching clients:', err);
-          setError('Failed to load clients');
         }
       };
-
-      fetchUsers();
+      fetchClients();
     }
   }, [isOpen]);
 
   // Analyze LinkedIn profile
   const analyzeLinkedinProfile = async (client: Client) => {
-    setIsLoading(true);
-    setSelectedClient(client);
-    setError(null);
-
     try {
-      // Split full name into first and last name
       const [firstName, lastName] = client.name?.split(' ');
-
-      // Call FastAPI endpoint
       const response = await axios.post('http://127.0.0.1:8000/analyze_customer', {
         first_name: firstName,
         last_name: lastName || ''
       });
-
+      setSelectedClient(client);
       setLinkedinAnalysis(response.data);
     } catch (err) {
       console.error('LinkedIn Analysis Error:', err);
-      setError('Failed to analyze LinkedIn profile');
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  // Reset state when modal closes
-  const handleClose = () => {
-    onClose();
-    setSelectedClient(null);
-    setLinkedinAnalysis(null);
-  };
+  // Skills Chart Data
+  const skillChartData = linkedinAnalysis?.skills.map((skill, index) => ({
+    name: skill,
+    value: index + 1
+  })) || [];
+
+  // Investment Potential Chart Data
+  const investmentData = [
+    { name: 'Investment Potential', value: linkedinAnalysis?.investment_potential || 0 },
+    { name: 'Remaining', value: 100 - (linkedinAnalysis?.investment_potential || 0) }
+  ];
+
+  const COLORS = ['#0088FE', '#DDDDDD'];
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
-    <DialogContent className="min-w-5xl bg-slate-900 border-slate-700 text-slate-100">
-      <DialogHeader>
-        <DialogTitle className="text-xl font-bold text-teal-400">Clients Dashboard</DialogTitle>
-      </DialogHeader>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="min-w-[60vw] max-h-[95vh] bg-slate-900 border-slate-700 text-slate-100 overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-bold text-teal-400">
+            Client Insights Dashboard
+          </DialogTitle>
+        </DialogHeader>
 
-        {/* Users Table */}
-        <Card className=" bg-slate-800 border-slate-700">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold text-slate-200">Client List</CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            <Table>
-              <TableHeader className="bg-slate-700">
-                <TableRow>
-                  <TableHead className="text-slate-200">ID</TableHead>
-                  <TableHead className="text-slate-200">Name</TableHead>
-                  <TableHead className="text-slate-200">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {clients.map((client) => (
-                  <TableRow key={client.id} className="hover:bg-slate-700/50 transition-colors">
-                    <TableCell className="text-slate-300">{client.id}</TableCell>
-                    <TableCell className="text-slate-300">{client.name || 'Unnamed Client'}</TableCell>
-                    <TableCell>
-                      <Button
-                        onClick={() => analyzeLinkedinProfile(client)}
-                        className="bg-blue-600 hover:bg-blue-700 text-slate-100"
-                        disabled={!client.name}
-                      >
-                        Analyze Profile
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-
-        {/* LinkedIn Analysis Modal */}
-        {selectedClient && linkedinAnalysis && (
-  <Dialog open={!!selectedClient} onOpenChange={() => setSelectedClient(null)}>
-    <DialogContent className="min-w-[800px] max-h-[90vh] overflow-y-auto bg-slate-900 border-slate-700 text-slate-100">
-      <DialogHeader>
-        <DialogTitle className="text-xl font-bold text-teal-400">
-          LinkedIn Profile Analysis
-        </DialogTitle>
-      </DialogHeader>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* User Details */}
-        <Card className="bg-slate-800 border-slate-700">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold text-slate-200">User Details</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-slate-300">Name: {selectedClient.name}</p>
-          </CardContent>
-        </Card>
-
-        {/* Real Estate Assessment */}
-        <Card className="bg-slate-800 border-slate-700">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold text-slate-200">
-              Real Estate Assessment
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="max-h-[300px] overflow-y-auto">
-            <p className="text-slate-300">{linkedinAnalysis.real_estate_assessment}</p>
-          </CardContent>
-        </Card>
-
-        {/* Add Profile Description if available */}
-        {linkedinAnalysis.description && (
-          <Card className="md:col-span-2 bg-slate-800 border-slate-700">
+        {/* Bento Box Grid */}
+        <div className="grid grid-cols-12 gap-4">
+          {/* Client List */}
+          <Card className="col-span-3 bg-slate-800 border-slate-700">
             <CardHeader>
-              <CardTitle className="text-lg font-semibold text-slate-200">
-                Profile Description
+              <CardTitle className="text-lg font-semibold text-slate-200 flex items-center">
+                <Briefcase className="mr-2 text-teal-400" /> Clients
               </CardTitle>
             </CardHeader>
-            <CardContent className="max-h-[300px] overflow-y-auto">
-              <p className="text-slate-300">{linkedinAnalysis.description}</p>
+            <CardContent className="p-0">
+              <div className="space-y-2 max-h-[500px] overflow-y-auto">
+                {clients.map((client) => (
+                  <div 
+                    key={client.id} 
+                    className="flex justify-between items-center p-3 hover:bg-slate-700 transition-colors"
+                  >
+                    <span className="text-slate-300">{client.name}</span>
+                    <Button 
+                      size="sm"
+                      onClick={() => analyzeLinkedinProfile(client)}
+                      className="bg-teal-600 hover:bg-teal-700 text-white"
+                    >
+                      Analyze
+                    </Button>
+                  </div>
+                ))}
+              </div>
             </CardContent>
           </Card>
-        )}
-      </div>
-    </DialogContent>
-  </Dialog>
-)}
+
+          {/* Profile Details */}
+          {linkedinAnalysis && (
+            <>
+              {/* Description */}
+              <Card className="col-span-6 bg-slate-800 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-lg font-semibold text-slate-200 flex items-center">
+                    <AlignLeft className="mr-2 text-teal-400" /> Profile Description
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-slate-300">{linkedinAnalysis.description}</p>
+                </CardContent>
+              </Card>
+
+              {/* Quick Stats */}
+              <Card className="col-span-3 bg-slate-800 border-slate-700 grid grid-cols-2 gap-2 p-4">
+                <div className="flex flex-col items-center bg-slate-700 p-3 rounded">
+                  <GraduationCap className="text-teal-400 mb-2" />
+                  <span className="text-slate-300 text-sm">Experience</span>
+                  <strong className="text-white">{linkedinAnalysis.experience_years} Years</strong>
+                </div>
+                <div className="flex flex-col items-center bg-slate-700 p-3 rounded">
+                  <DollarSign className="text-teal-400 mb-2" />
+                  <span className="text-slate-300 text-sm">Investment</span>
+                  <strong className="text-white">{linkedinAnalysis.investment_potential}/100</strong>
+                </div>
+
+                <div className="flex flex-col items-center bg-slate-700 p-3 rounded col-span-2">
+                  <Target className="text-teal-400 mb-2" />
+                  <span className="text-slate-300 text-sm">Education</span>
+                  <div className="text-white text-center">
+                    {linkedinAnalysis.education.join(', ')}
+                  </div>
+                </div>
+              </Card>
+
+              {/* Skills Chart */}
+              <Card className="col-span-6 bg-slate-800 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-lg font-semibold text-slate-200 flex items-center">
+                    <BookOpen className="mr-2 text-teal-400" /> Skills Distribution
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={skillChartData}>
+                      <XAxis dataKey="name" stroke="#64748b" />
+                      <YAxis stroke="#64748b" />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: '#1e293b', 
+                          color: '#cbd5e1',
+                          border: 'none'
+                        }} 
+                      />
+                      <Bar dataKey="value" fill="#14b8a6" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+
+              {/* Investment Potential */}
+              <Card className="col-span-6 bg-slate-800 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-lg font-semibold text-slate-200 flex items-center">
+                    <DollarSign className="mr-2 text-teal-400" /> Investment Potential
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                      <Pie
+                        data={investmentData}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        outerRadius={80}
+                        fill="white"
+                        dataKey="value"
+                      >
+                        {investmentData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: '#1e293b', 
+                          color: '#ffffff',
+                          border: 'none'
+                        }} 
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </>
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   );
