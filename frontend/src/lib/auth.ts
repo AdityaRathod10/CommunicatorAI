@@ -92,7 +92,7 @@ export async function getUserById(userId: string) {
 // User login
 export async function loginUser(email: string, password: string) {
   // Find user by email (corrected model name to users)
-  const user = await prisma.users.findUnique({
+  const user = await prisma.Users.findUnique({
     where: { email }
   })
 
@@ -113,4 +113,29 @@ export async function loginUser(email: string, password: string) {
   // Return user without password hash
   const { passwordHash, ...userWithoutPassword } = user
   return userWithoutPassword
+}
+
+
+export async function getAllClients() {
+  try {
+    const clients = await prisma.Clients.findMany({
+      select: {
+        id: true,
+        name: true,
+        // Add other client fields as needed
+      },
+    })
+
+    return clients
+  } catch (error) {
+    console.error('DETAILED ERROR in getAllClients:', error);
+    
+    // More specific error handling
+    if (error instanceof Error) {
+      console.error('Error Name:', error.name);
+      console.error('Error Message:', error.message);
+      console.error('Error Stack:', error.stack);
+    }
+    throw new Error(`Unable to retrieve clients: ${error instanceof Error ? error.message : 'Unknown error'}`)
+  }
 }

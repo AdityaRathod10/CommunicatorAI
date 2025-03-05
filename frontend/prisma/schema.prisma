@@ -23,8 +23,9 @@ model Users {
 
 model Clients {
   id             String    @id @default(uuid())
-  userId         String
-  user           Users     @relation(fields: [userId], references: [id])
+  name           String?
+  userId         String?
+  user           Users?     @relation(fields: [userId], references: [id])
   
   conversations  Conversations[]
   propertyInterests PropertyInterests[]

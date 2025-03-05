@@ -46,6 +46,46 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import ClientsSection from "./ClientsSection"
+import axios from "axios"
+
+interface Client {
+  id: string;
+  name?: string;
+  userId?: string;
+  conversations?: Conversation[];
+  propertyInterests?: PropertyInterest[];
+}
+
+interface Conversation {
+  id: string;
+  userId: string;
+  clientId: string;
+  followUpTasks?: FollowUpTask[];
+}
+
+interface FollowUpTask {
+  id: string;
+  userId: string;
+  conversationId: string;
+}
+
+interface PropertyInterest {
+  id: string;
+  clientId: string;
+}
+interface ConversationDetail {
+  time: string;
+  status: "new" | "followup" | "completed";
+  language: string;
+  keyPoints: string;
+}
+const CONVERSATION_DETAILS: ConversationDetail[] = [
+  { time: "10 min ago", status: "new", language: "Hindi/English", keyPoints: "Property Inquiry Details" },
+  { time: "45 min ago", status: "followup", language: "Hindi/English", keyPoints: "Follow-up on previous inquiry" },
+  { time: "2 hours ago", status: "completed", language: "English", keyPoints: "Finalized property details" },
+  { time: "Yesterday", status: "new", language: "Hindi", keyPoints: "New property inquiry" },
+  { time: "Yesterday", status: "followup", language: "Marathi", keyPoints: "Follow-up on site visit" }
+];
 
 export default function Dashboard() {
   const [theme, setTheme] = useState<"dark" | "light">("dark")
@@ -56,8 +96,11 @@ export default function Dashboard() {
   const [currentTime, setCurrentTime] = useState(new Date())
   const [isLoading, setIsLoading] = useState(true)
   const [isClientsModalOpen, setIsClientsModalOpen] = useState(false)
+  const [clients, setClients] = useState<Client[]>([]);
   const [activeLanguage, setActiveLanguage] = useState("all")
-
+  
+  
+  
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   // Simulate data loading
@@ -201,6 +244,27 @@ export default function Dashboard() {
     setIsClientsModalOpen(true)
   }
 
+
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const response = await axios.get('/api/get-clients');
+        console.log("Fetched Clients:", response.data); // Debugging line
+        if (Array.isArray(response.data)) {
+          setClients(response.data);
+        } else {
+          console.error("Unexpected API response format:", response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching clients:', error);
+      }
+    };
+  
+    fetchClients();
+  }, []);
+  
+
+ 
   return (
     <div
       className={`${theme} min-h-screen bg-gradient-to-br from-black to-slate-900 text-slate-100 relative overflow-hidden`}
@@ -295,11 +359,10 @@ export default function Dashboard() {
                   <NavItem icon={Command} label="Dashboard" active />
                   <NavItem icon={MessageCircle} label="Conversations" />
                   <NavItem icon={Users} label="Clients" onClick={handleClientsClick} />
-                  <NavItem icon={Building} label="Properties" />
                   <NavItem icon={Calendar} label="Appointments" />
-                  <NavItem icon={ListTodo} label="Follow-ups" />
+                  {/* <NavItem icon={ListTodo} label="Follow-ups" /> */}
                   <NavItem icon={Languages} label="Translations" />
-                  <NavItem icon={Settings} label="Settings" />
+                 
                 </nav>
 
                 <div className="mt-8 pt-6 border-t border-slate-700/50">
@@ -418,54 +481,56 @@ export default function Dashboard() {
                       </div>
 
                       <TabsContent value="conversations" className="mt-0">
-                        <div className="bg-slate-800/30 rounded-lg border border-slate-700/50 overflow-hidden">
-                          <div className="grid grid-cols-12 text-xs text-slate-400 p-3 border-b border-slate-700/50 bg-slate-800/50">
-                            <div className="col-span-3">Client</div>
-                            <div className="col-span-2">Language</div>
-                            <div className="col-span-3">Key Points</div>
-                            <div className="col-span-2">Time</div>
-                            <div className="col-span-2">Actions</div>
-                          </div>
+  <div className="bg-slate-800/30 rounded-lg border border-slate-700/50 overflow-hidden">
+    {/* Table Header */}
+    <div className="grid grid-cols-12 text-sm font-medium text-slate-300 p-3 border-b border-slate-700/50 bg-slate-800/50">
+      <div className="col-span-3">Client</div>
+      <div className="col-span-2">Language</div>
+      <div className="col-span-3">Key Points</div>
+      <div className="col-span-2">Time</div>
+      <div className="col-span-2 text-center">Actions</div>
+    </div>
 
-                          <div className="divide-y divide-slate-700/30">
-                            <ConversationRow
-                              client="Rahul Sharma"
-                              language="Hindi/English"
-                              keyPoints="3BHK in Andheri, Budget 1.5Cr, Ready to move"
-                              time="10 min ago"
-                              status="new"
-                            />
-                            <ConversationRow
-                              client="Priya Patel"
-                              language="Marathi"
-                              keyPoints="2BHK in Pune, School nearby, Max 80L"
-                              time="45 min ago"
-                              status="followup"
-                            />
-                            <ConversationRow
-                              client="Venkat Rao"
-                              language="Telugu"
-                              keyPoints="Commercial space, 1000 sq ft, Hyderabad"
-                              time="2 hours ago"
-                              status="completed"
-                            />
-                            <ConversationRow
-                              client="Sarah Johnson"
-                              language="English"
-                              keyPoints="Villa, gated community, 2Cr budget"
-                              time="Yesterday"
-                              status="new"
-                            />
-                            <ConversationRow
-                              client="Amit Desai"
-                              language="Hindi/Marathi"
-                              keyPoints="Investment property, rental income focus"
-                              time="Yesterday"
-                              status="followup"
-                            />
-                          </div>
-                        </div>
-                      </TabsContent>
+    {/* Table Body */}
+    <div className="divide-y divide-slate-700/30">
+      {clients.length > 0 ? (
+        clients.map((client, index) => {
+          const details = CONVERSATION_DETAILS[index] || {
+            time: "Recently",
+            status: "new",
+            language: "N/A",
+            keyPoints: "No details available",
+          };
+
+          return (
+            <div
+              key={client.id}
+              className="grid grid-cols-12 text-sm text-slate-400 p-3 hover:bg-slate-700/30 transition"
+            >
+              <div className="col-span-3 font-medium text-slate-200">
+                {client.name || "Unknown Client"}
+              </div>
+              <div className="col-span-2">{details.language}</div>
+              <div className="col-span-3 truncate">{details.keyPoints}</div>
+              <div className="col-span-2">{details.time}</div>
+              <div className="col-span-2 flex justify-center gap-2">
+                <button className="px-2 py-1 text-xs text-white bg-blue-600 rounded hover:bg-blue-500 transition">
+                  View
+                </button>
+                <button className="px-2 py-1 text-xs text-white bg-red-600 rounded hover:bg-red-500 transition">
+                  Remove
+                </button>
+              </div>
+            </div>
+          );
+        })
+      ) : (
+        <div className="p-4 text-center text-slate-400">No clients available.</div>
+      )}
+    </div>
+  </div>
+</TabsContent>
+
 
                       <TabsContent value="languages" className="mt-0">
                         <div className="h-64 w-full relative bg-slate-800/30 rounded-lg border border-slate-700/50 overflow-hidden">
@@ -1154,24 +1219,24 @@ function ConversationRow({
   time,
   status,
 }: {
-  client: string
-  language: string
-  keyPoints: string
-  time: string
-  status: "new" | "followup" | "completed"
+  client: string;
+  language: string;
+  keyPoints: string;
+  time: string;
+  status: "new" | "followup" | "completed";
 }) {
   const getStatusBadge = () => {
     switch (status) {
       case "new":
-        return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">New</Badge>
+        return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">New</Badge>;
       case "followup":
-        return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Follow-up</Badge>
+        return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Follow-up</Badge>;
       case "completed":
-        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Completed</Badge>
+        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Completed</Badge>;
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   return (
     <div className="grid grid-cols-12 py-2 px-3 text-sm hover:bg-slate-800/50">
@@ -1183,7 +1248,7 @@ function ConversationRow({
       <div className="col-span-2 text-slate-500">{time}</div>
       <div className="col-span-2 flex items-center space-x-2">{getStatusBadge()}</div>
     </div>
-  )
+  );
 }
 
 // Insight item component
