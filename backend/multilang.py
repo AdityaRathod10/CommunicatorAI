@@ -7,7 +7,7 @@ import spacy
 import chromadb
 from chromadb.utils import embedding_functions
 
-genai.configure(api_key="AIzaSyDsMerGdK4lbbgIdoIcmSvqlfwAR1jY9X0")
+genai.configure(api_key=GEMINI_API_KEY)
 
 models = genai.list_models()
 for model in models:
